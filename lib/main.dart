@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uts/history.dart';
 import 'package:uts/home.dart';
 
 void main() {
@@ -18,6 +19,7 @@ class _MyAppState extends State<MyApp> {
 
   final List<Widget> pages = [
     MyHomePage(),
+    MyHistoryPage(),
   ];
 
   @override
@@ -34,7 +36,7 @@ class _MyAppState extends State<MyApp> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: const Icon(
-            Icons.qr_code_scanner_rounded,
+            Icons.qr_code_scanner_outlined,
             size: 35,
           ),
         ),
@@ -58,8 +60,18 @@ class _MyAppState extends State<MyApp> {
                 },
               ),
               Navbar(
-                iconData: Icons.history_outlined,
+                iconData: Icons.history,
                 name: "History",
+                onTap: () {
+                  setState(() {
+                    currentIndex = 1;
+                    pageController.animateToPage(
+                      1,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.ease,
+                    );
+                  });
+                },
               ),
               Padding(
                 padding: EdgeInsets.all(10),
@@ -67,7 +79,7 @@ class _MyAppState extends State<MyApp> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 5, top: 25),
+                      padding: EdgeInsets.only(top: 25),
                       child: Text(
                         "Pay",
                         style: TextStyle(
