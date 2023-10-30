@@ -1,89 +1,104 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:uts/home.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'LinkAja',
-      home: MyHomePage(),
-    );
-  }
+  State<MyApp> createState() => _MyAppState();
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
+class _MyAppState extends State<MyApp> {
+  int currentIndex = 0;
+  final PageController pageController = PageController(initialPage: 0);
+
+  final List<Widget> pages = [
+    MyHomePage(),
+  ];
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: null,
-      body: ListView(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'LinkAja',
+      home: Scaffold(
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          child: const Icon(
+            Icons.qr_code_scanner_rounded,
+            size: 35,
+          ),
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            mainAxisSize: MainAxisSize.max,
             children: [
-              Container(
-                margin: EdgeInsets.only(left: 8.0),
-                child: Image.network(
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/LinkAja.svg/640px-LinkAja.svg.png',
-                  height: 40,
+              Navbar(
+                iconData: Icons.home_outlined,
+                name: "Home",
+                onTap: () {
+                  setState(() {
+                    currentIndex = 0;
+                    pageController.animateToPage(
+                      0,
+                      duration: const Duration(milliseconds: 1000),
+                      curve: Curves.ease,
+                    );
+                  });
+                },
+              ),
+              Navbar(
+                iconData: Icons.history_outlined,
+                name: "History",
+              ),
+              Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 5, top: 25),
+                      child: Text(
+                        "Pay",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
               ),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        FontAwesomeIcons.tags,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {},
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                    child: IconButton(
-                      icon: const Icon(
-                        FontAwesomeIcons.heart,
-                        color: Colors.black,
-                      ),
-                      onPressed: () {
-                        // Tindakan saat tombol notifikasi ditekan
-                      },
-                    ),
-                  )
-                ],
+              Navbar(
+                iconData: Icons.inbox_outlined,
+                name: "Inbox",
+              ),
+              Navbar(
+                iconData: Icons.account_circle_outlined,
+                name: "Account",
               ),
             ],
           ),
-          Card(
-            color: Colors.red,
-            margin: EdgeInsets.all(10),
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-              ),
-            ),
-          )
-        ],
+        ),
+        body: PageView(
+          controller: pageController,
+          children: pages,
+          onPageChanged: (index) {
+            setState(() {
+              currentIndex = index;
+            });
+          },
+        ),
       ),
     );
   }
